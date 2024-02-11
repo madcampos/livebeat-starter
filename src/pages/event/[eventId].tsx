@@ -1,27 +1,43 @@
+import type { DatabaseEvent } from '@/lib/events';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'wouter';
+
+import { getEventById } from '@/lib/events';
+
 import Layout from '@/components/Layout';
 import Container from '@/components/Container';
 // import Button from '@/components/Button';
 
-import events from '@/data/events.json';
-
 function Event() {
-  const event = events[0];
-  const image = {
-    url: events[0].imageUrl,
-    alt: ''
-  };
+  const { eventId } = useParams<{ eventId: string }>();
+  const [event, setEvent] = useState<DatabaseEvent | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await getEventById(eventId);
+
+        setEvent(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchEvent();
+  }, [eventId]);
 
   return (
     <Layout>
       <Container className="grid gap-12 grid-cols-1 md:grid-cols-2">
         <div>
-          {image?.url && (
+          {event?.image?.url && (
             <img
               className="block rounded"
               width={800}
               height={450}
-              src={image.url}
-              alt={image.alt}
+              src={event.image.url}
+              alt={event.image.alt}
             />
           )}
         </div>

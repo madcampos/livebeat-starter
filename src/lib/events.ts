@@ -9,7 +9,7 @@ export interface DatabaseEvent extends Models.Document {
 		url: string,
 		alt: string
 	}
-};
+}
 
 
 export async function getEvents() {

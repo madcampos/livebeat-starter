@@ -8,6 +8,8 @@ interface ImportMetaEnv {
 
 	readonly VITE_APPWRITE_ENDPOINT: string,
 	readonly VITE_APPWRITE_PROJECT: string,
+	readonly VITE_APPWRITE_EVENTS_DATABASE_ID: string,
+	readonly VITE_APPWRITE_EVENTS_COLLECTION_ID: string
 }
 
 interface ImportMeta {

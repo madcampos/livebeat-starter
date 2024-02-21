@@ -8,7 +8,7 @@ import EventCard from '@/components/EventCard';
 
 import { type DatabaseEvent, getEvents } from '@/lib/events';
 
-function Home() {
+function HomePage() {
 	const [events, setEvents] = useState<DatabaseEvent[] | undefined>([]);
 
 	useEffect(() => {
@@ -20,9 +20,9 @@ function Home() {
 			} catch (error) {
 				console.error(error);
 			}
-		}
+		};
 
-		fetchEvents();
+		void fetchEvents();
 	}, []);
 
 	return (
@@ -63,7 +63,7 @@ function Home() {
 											/>
 										</a>
 									</Link>
-								)
+								);
 							})}
 						</div>
 					</Container>
@@ -84,7 +84,7 @@ function Home() {
 				</Container>
 			)}
 		</Layout>
-	)
+	);
 }
 
-export default Home;
+export default HomePage;

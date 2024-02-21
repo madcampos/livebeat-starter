@@ -34,7 +34,7 @@ function HomePage() {
 							Upcoming Events
 						</h1>
 						<p>
-							<Link href="/events/new">
+							<Link href="/event/new">
 								<a className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
 									Add Event
 								</a>
@@ -75,7 +75,7 @@ function HomePage() {
 						No events currently scheduled.
 					</p>
 					<p className="w-100 text-center">
-						<Link href="/events/new">
+						<Link href="/event/new">
 							<a>
 								Add an Event
 							</a>

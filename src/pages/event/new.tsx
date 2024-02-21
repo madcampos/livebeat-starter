@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'wouter';
 
 import Layout from '@/components/Layout';
 import Container from '@/components/Container';
@@ -9,17 +10,79 @@ import InputDate from '@/components/InputDate';
 import InputFile from '@/components/InputFile';
 import Button from '@/components/Button';
 
+import { createEvent } from '../../lib/events.ts';
+import { createImage } from '../../lib/images.ts';
+
+async function getImageDimentions(file?: File) {
+	if (!file) {
+		return { width: 0, height: 0 };
+	}
+
+	const img = new Image();
+
+	img.src = URL.createObjectURL(file);
+
+	return new Promise<{ width: number, height: number }>((resolve, reject) => {
+		img.onload = () => {
+			const { width, height } = img;
+
+			URL.revokeObjectURL(img.src);
+			resolve({ width, height });
+		};
+
+		img.onerror = reject;
+	});
+}
 
 function NewEventPage() {
+	const [, setLocation] = useLocation();
 	const [error] = useState<string>();
+	const [isSubmitting, setSubmitting] = useState(false);
 
-	function handleOnSubmit(evt: React.SyntheticEvent) {
+	async function handleOnSubmit(evt: React.SyntheticEvent) {
 		evt.preventDefault();
+
+		const form = evt.target as HTMLFormElement;
+
+		try {
+			setSubmitting(true);
+
+			form.setAttribute('aria-disabled', 'true');
+			const formData = new FormData(form);
+
+			const name = formData.get('name') as string;
+			const date = formData.get('date') as string;
+			const location = formData.get('location') as string;
+			const image = formData.get('image') as File | undefined;
+			const imageAlt = formData.get('image-alt') as string;
+			const { width, height } = await getImageDimentions(image);
+			let imageEntry;
+
+			if (image) {
+				imageEntry = await createImage(image);
+			}
+
+			const result = await createEvent({
+				name,
+				date: new Date(date),
+				location,
+				imageWidth: width,
+				imageHeight: height,
+				imageId: imageEntry?.$id,
+				imageAlt
+			});
+
+			setLocation(`/event/${result.$id}`);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			form.reset();
+			setSubmitting(false);
+		}
 	}
 
 	return (
 		<Layout>
-
 			<Container className="grid gap-12 grid-cols-1 md:grid-cols-2">
 				<div>
 					<h1 className="text-3xl font-bold mb-6">
@@ -52,19 +115,24 @@ function NewEventPage() {
 						<InputText id="location" name="location" type="text" required />
 					</FormRow>
 
+
 					<FormRow className="mb-6">
-						<FormLabel htmlFor="image">File</FormLabel>
+						<FormLabel htmlFor="image">Image</FormLabel>
 						<InputFile id="image" name="image" />
 						<p className="text-sm mt-2">Accepted File Types: jpg, png</p>
 					</FormRow>
 
-					<Button>Submit</Button>
+					<FormRow className="mb-5">
+						<FormLabel htmlFor="image-alt">Image alt. text</FormLabel>
+						<InputText id="image-alt" name="image-alt" type="text" />
+					</FormRow>
+
+					<Button isSubmitting={isSubmitting}>Submit</Button>
 
 					{error && (
 						<p className="bg-red-50 p-4 mt-6 rounded">{error}</p>
 					)}
 				</form>
-
 			</Container>
 		</Layout>
 	);

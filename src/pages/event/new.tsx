@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
 
-import Layout from '@/components/Layout';
+import Button from '@/components/Button';
 import Container from '@/components/Container';
-import FormRow from '@/components/FormRow';
 import FormLabel from '@/components/FormLabel';
-import InputText from '@/components/InputText';
+import FormRow from '@/components/FormRow';
 import InputDate from '@/components/InputDate';
 import InputFile from '@/components/InputFile';
-import Button from '@/components/Button';
+import InputText from '@/components/InputText';
+import Layout from '@/components/Layout';
 
 import { createEvent } from '../../lib/events.ts';
 import { createImage } from '../../lib/images.ts';
@@ -37,7 +37,7 @@ async function getImageDimentions(file?: File) {
 function NewEventPage() {
 	const [, setLocation] = useLocation();
 	const [error] = useState<string>();
-	const [isSubmitting, setSubmitting] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	async function handleOnSubmit(evt: React.SyntheticEvent) {
 		evt.preventDefault();
@@ -45,7 +45,7 @@ function NewEventPage() {
 		const form = evt.target as HTMLFormElement;
 
 		try {
-			setSubmitting(true);
+			setIsSubmitting(true);
 
 			form.setAttribute('aria-disabled', 'true');
 			const formData = new FormData(form);
@@ -77,7 +77,7 @@ function NewEventPage() {
 			console.error(err);
 		} finally {
 			form.reset();
-			setSubmitting(false);
+			setIsSubmitting(false);
 		}
 	}
 

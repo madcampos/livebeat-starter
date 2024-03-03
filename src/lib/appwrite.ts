@@ -1,4 +1,4 @@
-import { Client, Databases, Storage } from 'appwrite';
+import { Account, Client, Databases, Storage } from 'appwrite';
 
 export const ids = {
 	events: {
@@ -18,3 +18,5 @@ appwriteClient.setProject(import.meta.env.VITE_APPWRITE_PROJECT);
 export const databases = new Databases(appwriteClient);
 
 export const storage = new Storage(appwriteClient);
+
+export const auth = new Account(appwriteClient);

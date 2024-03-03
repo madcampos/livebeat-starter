@@ -9,6 +9,7 @@ import { login } from '../lib/auth.ts';
 
 function LoginPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isSent, setIsSent] = useState(false);
 
 	async function handleOnSubmit(evt: React.FormEvent) {
 		evt.preventDefault();
@@ -26,6 +27,8 @@ function LoginPage() {
 			const email = formData.get('email') as string;
 
 			await login(email);
+
+			setIsSent(true);
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -39,14 +42,19 @@ function LoginPage() {
 				<h1 className="text-3xl font-bold text-center mb-6">
 					Log In
 				</h1>
-				<form className="max-w-xs border border-slate-200 dark:border-slate-500 rounded p-6 mx-auto" onSubmit={handleOnSubmit}>
-					<FormRow className="mb-5">
-						<FormLabel htmlFor="email">Email</FormLabel>
-						<InputText id="email" name="email" type="email" required />
-					</FormRow>
+				{!isSent && (
+					<form className="max-w-xs border border-slate-200 dark:border-slate-500 rounded p-6 mx-auto" onSubmit={handleOnSubmit}>
+						<FormRow className="mb-5">
+							<FormLabel htmlFor="email">Email</FormLabel>
+							<InputText id="email" name="email" type="email" required />
+						</FormRow>
 
-					<Button isSubmitting={isSubmitting}>Submit</Button>
-				</form>
+						<Button isSubmitting={isSubmitting}>Submit</Button>
+					</form>
+				)}
+				{isSent && (
+					<p className="text-center">Please check your email for a ✨ magic link ✨.</p>
+				)}
 			</Container>
 		</Layout>
 	);

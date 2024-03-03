@@ -57,13 +57,13 @@ function NewEventPage() {
 			const name = formData.get('name') as string;
 			const date = formData.get('date') as string;
 			const location = formData.get('location') as string;
-			const image = formData.get('image') as File | undefined;
+			const image = formData.get('image') as File;
 			let imageEntry;
 			let imageAlt;
 			let width;
 			let height;
 
-			if (image?.name && image?.size > 0) {
+			if (image.name && image.size > 0) {
 				({ width, height } = await getImageDimentions(image));
 				imageEntry = await createImage(image);
 				imageAlt = formData.get('image-alt') as string;

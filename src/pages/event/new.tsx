@@ -44,6 +44,10 @@ function NewEventPage() {
 
 		const form = evt.target as HTMLFormElement;
 
+		if (!form.querySelector('button[aria-disabled="true"]')) {
+			return;
+		}
+
 		try {
 			setIsSubmitting(true);
 

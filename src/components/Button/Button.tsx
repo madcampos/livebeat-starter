@@ -15,6 +15,10 @@ const Button = ({ children, className = '', color = 'slate', onClick, isSubmitti
 		buttonColor = 'text-white bg-red-600 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-400';
 	}
 
+	if (isSubmitting) {
+		buttonColor = 'text-white bg-gray-400 cursor-not-allowed dark:bg-gray-600 dark:hover:bg-gray-500';
+	}
+
 	return (
 		<button
 			onClick={(evt) => {

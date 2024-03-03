@@ -1,20 +1,39 @@
 import type { DatabaseEvent } from '@/lib/events';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'wouter';
+import { useLocation, useParams } from 'wouter';
 
-import { getEventById } from '@/lib/events';
+import { deleteEvent, getEventById } from '@/lib/events';
 
-import Layout from '@/components/Layout';
+import Button from '@/components/Button';
 import Container from '@/components/Container';
+import Layout from '@/components/Layout';
 import { getFilePreviewUrl } from '../../lib/images.ts';
-// Import Button from '@/components/Button';
 
 function EventPage() {
 	const { eventId } = useParams<{ eventId: string }>();
+	const [, setLocation] = useLocation();
 	const [event, setEvent] = useState<DatabaseEvent | undefined>(undefined);
 	const [error, setError] = useState<string>();
 	const [imageUrl, setImageUrl] = useState<string>();
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	async function handleOnDelete(eventToDelete: DatabaseEvent) {
+		try {
+			setIsSubmitting(true);
+
+			// eslint-disable-next-line no-alert
+			if (confirm('Are you sure you want to delete this event?')) {
+				await deleteEvent(eventToDelete);
+
+				setLocation(`/`);
+			}
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsSubmitting(false);
+		}
+	}
 
 	useEffect(() => {
 		const fetchEvent = async () => {
@@ -66,9 +85,9 @@ function EventPage() {
 							<p className="text-lg font-medium text-neutral-600 dark:text-neutral-200">
 								<strong>Location:</strong> {event?.location}
 							</p>
-							{/* <p className="mt-6">
-								<Button color="red">Delete Event</Button>
-							</p> */}
+							<p className="mt-6">
+								<Button color="red" isSubmitting={isSubmitting} onClick={async () => handleOnDelete(event)}>Delete Event</Button>
+							</p>
 						</>
 					)}
 				</div>

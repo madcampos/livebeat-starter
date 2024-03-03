@@ -1,12 +1,18 @@
+import type { DatabaseEvent } from '@/lib/events';
+
 import { useEffect, useState } from 'react';
 
 import { Link } from 'wouter';
 
-import Layout from '@/components/Layout';
 import Container from '@/components/Container';
 import EventCard from '@/components/EventCard';
+import Layout from '@/components/Layout';
 
-import { type DatabaseEvent, getEvents } from '@/lib/events';
+import { getEvents } from '@/lib/events';
+import { getFilePreviewUrl } from '../lib/images.ts';
+
+const MIN_IMAGE_WIDTH = 320;
+const MIN_IMAGE_HEIGHT = 240;
 
 function HomePage() {
 	const [events, setEvents] = useState<DatabaseEvent[] | undefined>([]);
@@ -54,9 +60,9 @@ function HomePage() {
 												date={eventDate}
 												image={{
 													alt: '',
-													height: event.imageHeight,
-													url: event.imageUrl,
-													width: event.imageWidth
+													height: event.imageHeight ?? MIN_IMAGE_HEIGHT,
+													url: event.imageId ? getFilePreviewUrl(event.imageId).href : '',
+													width: event.imageWidth ?? MIN_IMAGE_WIDTH
 												}}
 												location={event.location ?? 'No Location Specified'}
 												name={event.name}

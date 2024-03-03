@@ -1,5 +1,6 @@
 import { ID, type Models } from 'appwrite';
 import { databases, ids } from './appwrite';
+import { deleteImageById } from './images.ts';
 
 export interface DatabaseEventData {
 	name: string,
@@ -19,8 +20,7 @@ export async function getEvents() {
 	return documents;
 }
 
-
-export async function getEventById(eventId: string) {
+export async function getEventById(eventId: DatabaseEvent['$id']) {
 	const result = await databases.getDocument<DatabaseEvent>(ids.events.database, ids.events.collection, eventId);
 
 	return result;
@@ -30,4 +30,12 @@ export async function createEvent(event: DatabaseEventData) {
 	const result = await databases.createDocument<DatabaseEvent>(ids.events.database, ids.events.collection, ID.unique(), event);
 
 	return result;
+}
+
+export async function deleteEvent(event: DatabaseEvent) {
+	if (event.imageId) {
+		await deleteImageById(event.imageId);
+	}
+
+	await databases.deleteDocument(ids.events.database, ids.events.collection, event.$id);
 }

@@ -44,7 +44,7 @@ function NewEventPage() {
 
 		const form = evt.target as HTMLFormElement;
 
-		if (!form.querySelector('button[aria-disabled="true"]')) {
+		if (form.querySelector('button[aria-disabled="true"]')) {
 			return;
 		}
 
@@ -58,12 +58,15 @@ function NewEventPage() {
 			const date = formData.get('date') as string;
 			const location = formData.get('location') as string;
 			const image = formData.get('image') as File | undefined;
-			const imageAlt = formData.get('image-alt') as string;
-			const { width, height } = await getImageDimentions(image);
 			let imageEntry;
+			let imageAlt;
+			let width;
+			let height;
 
-			if (image) {
+			if (image?.name && image?.size > 0) {
+				({ width, height } = await getImageDimentions(image));
 				imageEntry = await createImage(image);
+				imageAlt = formData.get('image-alt') as string;
 			}
 
 			const result = await createEvent({

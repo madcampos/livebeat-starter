@@ -11,3 +11,7 @@ export function getFilePreviewUrl(fileId: string) {
 
 	return storage.getFilePreview(ids.images.bucket, fileId, THUMB_WIDTH, THUMB_HEIGHT);
 }
+
+export async function deleteImageById(fileId: string) {
+	await storage.deleteFile(ids.images.bucket, fileId);
+}

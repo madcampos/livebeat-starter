@@ -41,9 +41,9 @@ function HomePage() {
 						</h1>
 						<p>
 							<Link href="/event/new">
-								<a className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
+								<span className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
 									Add Event
-								</a>
+								</span>
 							</Link>
 						</p>
 					</Container>
@@ -55,7 +55,7 @@ function HomePage() {
 
 								return (
 									<Link key={event.$id} href={`/event/${event.$id}`}>
-										<a>
+										<span>
 											<EventCard
 												date={eventDate}
 												image={{
@@ -67,7 +67,7 @@ function HomePage() {
 												location={event.location ?? 'No Location Specified'}
 												name={event.name}
 											/>
-										</a>
+										</span>
 									</Link>
 								);
 							})}
@@ -82,9 +82,9 @@ function HomePage() {
 					</p>
 					<p className="w-100 text-center">
 						<Link href="/event/new">
-							<a>
+							<span>
 								Add an Event
-							</a>
+							</span>
 						</Link>
 					</p>
 				</Container>

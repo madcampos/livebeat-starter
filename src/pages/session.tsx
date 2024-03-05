@@ -1,9 +1,10 @@
 import Container from '@/components/Container';
 import { useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { verifySession } from '../lib/auth.ts';
+import { useAuth } from '../hooks/useAuth.tsx';
 
 function SessionPage() {
+	const { verifySession } = useAuth();
 	const [, setLocation] = useLocation();
 
 	useEffect(() => {

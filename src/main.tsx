@@ -2,13 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Route, Switch } from 'wouter';
 
+import EventPage from '@/pages/event/[eventId]';
+import NewEventPage from '@/pages/event/new';
 import HomePage from '@/pages/index';
 import LoginPage from '@/pages/login';
 import SessionPage from '@/pages/session';
-import NewEventPage from '@/pages/event/new';
-import EventPage from '@/pages/event/[eventId]';
 
 import '@/styles/global.css';
+import { AuthProvider } from './hooks/useAuth.tsx';
 
 const Router = () => (
 	<Switch>
@@ -22,6 +23,8 @@ const Router = () => (
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<Router />
+		<AuthProvider>
+			<Router />
+		</AuthProvider>
 	</React.StrictMode>
 );

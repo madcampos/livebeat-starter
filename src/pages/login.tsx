@@ -5,9 +5,10 @@ import FormRow from '@/components/FormRow';
 import InputText from '@/components/InputText';
 import Layout from '@/components/Layout';
 import { useState } from 'react';
-import { login } from '../lib/auth.ts';
+import { useAuth } from '../hooks/useAuth.tsx';
 
 function LoginPage() {
+	const { logIn } = useAuth();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isSent, setIsSent] = useState(false);
 
@@ -26,7 +27,7 @@ function LoginPage() {
 			const formData = new FormData(form);
 			const email = formData.get('email') as string;
 
-			await login(email);
+			await logIn(email);
 
 			setIsSent(true);
 		} catch (err) {

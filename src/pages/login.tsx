@@ -53,6 +53,9 @@ function LoginPage() {
 				<h1 className="text-3xl font-bold text-center mb-6">
 					Log In
 				</h1>
+				{error && (
+					<p className="bg-red-50 p-4 mt-6 rounded">{error}</p>
+				)}
 				{!isSent && (
 					<form className="max-w-xs border border-slate-200 dark:border-slate-500 rounded p-6 mx-auto" onSubmit={handleOnSubmit}>
 						<FormRow className="mb-5">
@@ -65,9 +68,6 @@ function LoginPage() {
 				)}
 				{isSent && (
 					<p className="text-center">Please check your email for a ✨ magic link ✨.</p>
-				)}
-				{error && (
-					<p>{error}</p>
 				)}
 			</Container>
 		</Layout>

@@ -37,7 +37,7 @@ function SessionPage() {
 					<p>Logging you in...</p>
 				)
 				: (
-					<p>{error}</p>
+					<p className="bg-red-50 p-4 mt-6 rounded">{error}</p>
 				)}
 		</Container>
 	);

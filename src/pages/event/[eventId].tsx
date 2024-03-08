@@ -75,7 +75,7 @@ function EventPage() {
 				</div>
 
 				<div>
-					{error && <p>{error}</p>}
+					{error && <p className="bg-red-50 p-4 mt-6 rounded">{error}</p>}
 					{!event && !error && <p>Loading...</p>}
 					{event && (
 						<>

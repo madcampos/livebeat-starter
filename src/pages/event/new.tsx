@@ -116,6 +116,10 @@ function NewEventPage() {
 				</div>
 
 				<form className="border border-slate-200 dark:border-slate-500 rounded p-6" onSubmit={handleOnSubmit}>
+					{error && (
+						<p className="bg-red-50 p-4 mt-6 rounded">{error}</p>
+					)}
+
 					<FormRow className="mb-5">
 						<FormLabel htmlFor="name">Event Name</FormLabel>
 						<InputText id="name" name="name" type="text" required />
@@ -144,10 +148,6 @@ function NewEventPage() {
 					</FormRow>
 
 					<Button isSubmitting={isSubmitting}>Submit</Button>
-
-					{error && (
-						<p className="bg-red-50 p-4 mt-6 rounded">{error}</p>
-					)}
 				</form>
 			</Container>
 		</Layout>

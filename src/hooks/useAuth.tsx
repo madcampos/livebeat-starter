@@ -5,9 +5,11 @@ import type { PropsWithChildren } from 'react';
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { verifySession as checkSession, getCurrentSession, login, logout } from '../lib/auth.ts';
+import { getTeams } from '../lib/users.ts';
 
 interface AuthContextInterface {
 	session?: Models.Session,
+	isAdmin: boolean,
 	logIn(email: string): Promise<void>,
 	verifySession(userId: string, secret: string): Promise<void>,
 	logOut(): Promise<void>
@@ -15,6 +17,7 @@ interface AuthContextInterface {
 
 export const AuthContext = createContext<AuthContextInterface>({
 	session: undefined,
+	isAdmin: false,
 	logIn: async () => { /* */ },
 	verifySession: async () => { /* */ },
 	logOut: async () => { /* */ }
@@ -22,6 +25,7 @@ export const AuthContext = createContext<AuthContextInterface>({
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const [session, setSession] = useState<Models.Session | undefined>(undefined);
+	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
 	useEffect(() => {
 		(async () => {
@@ -34,6 +38,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 			}
 		})();
 	}, []);
+
+	useEffect(() => {
+		if (!session?.$id) {
+			return;
+		}
+
+		(async () => {
+			const teams = await getTeams();
+
+			setIsAdmin(teams.findIndex((team) => team.$id === import.meta.env.VITE_APPWRITE_ADMIN_TEAM_ID) !== -1);
+		})();
+	}, [session?.$id]);
 
 	async function logIn(email: string) {
 		await login(email);
@@ -51,7 +67,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ session, logIn, verifySession, logOut }}>
+		<AuthContext.Provider value={{ session, isAdmin, logIn, verifySession, logOut }}>
 			{children}
 		</AuthContext.Provider>
 	);

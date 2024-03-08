@@ -14,7 +14,7 @@ import { getFilePreviewUrl } from '../../lib/images.ts';
 function EventPage() {
 	const { eventId } = useParams<{ eventId: string }>();
 	const [, setLocation] = useLocation();
-	const { session } = useAuth();
+	const { isAdmin } = useAuth();
 	const [event, setEvent] = useState<DatabaseEvent | undefined>(undefined);
 	const [error, setError] = useState<string>('');
 	const [imageUrl, setImageUrl] = useState<string>();
@@ -89,7 +89,7 @@ function EventPage() {
 								<strong>Location:</strong> {event?.location}
 							</p>
 							<p className="mt-6">
-								{session && (
+								{isAdmin && (
 									<Button color="red" isSubmitting={isSubmitting} onClick={async () => handleOnDelete(event)}>Delete Event</Button>
 								)}
 							</p>

@@ -5,12 +5,21 @@ import FormRow from '@/components/FormRow';
 import InputText from '@/components/InputText';
 import Layout from '@/components/Layout';
 import { useState } from 'react';
+import { useLocation } from 'wouter';
 import { useAuth } from '../hooks/useAuth.tsx';
 
 function LoginPage() {
-	const { logIn } = useAuth();
+	const { logIn, session } = useAuth();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isSent, setIsSent] = useState(false);
+	const [error, setError] = useState<string>('');
+	const [, setLocation] = useLocation();
+
+	if (session) {
+		setLocation('/');
+
+		return;
+	}
 
 	async function handleOnSubmit(evt: React.FormEvent) {
 		evt.preventDefault();
@@ -32,6 +41,7 @@ function LoginPage() {
 			setIsSent(true);
 		} catch (err) {
 			console.error(err);
+			setError((err as Error)?.message ?? err?.toString() ?? 'An error occurred');
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -55,6 +65,9 @@ function LoginPage() {
 				)}
 				{isSent && (
 					<p className="text-center">Please check your email for a ✨ magic link ✨.</p>
+				)}
+				{error && (
+					<p>{error}</p>
 				)}
 			</Container>
 		</Layout>

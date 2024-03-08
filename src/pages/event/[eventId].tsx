@@ -8,13 +8,15 @@ import { deleteEvent, getEventById } from '@/lib/events';
 import Button from '@/components/Button';
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
+import { useAuth } from '../../hooks/useAuth.tsx';
 import { getFilePreviewUrl } from '../../lib/images.ts';
 
 function EventPage() {
 	const { eventId } = useParams<{ eventId: string }>();
 	const [, setLocation] = useLocation();
+	const { session } = useAuth();
 	const [event, setEvent] = useState<DatabaseEvent | undefined>(undefined);
-	const [error, setError] = useState<string>();
+	const [error, setError] = useState<string>('');
 	const [imageUrl, setImageUrl] = useState<string>();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,6 +32,7 @@ function EventPage() {
 			}
 		} catch (err) {
 			console.error(err);
+			setError((err as Error)?.message ?? err?.toString() ?? 'An error occurred');
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -86,7 +89,9 @@ function EventPage() {
 								<strong>Location:</strong> {event?.location}
 							</p>
 							<p className="mt-6">
-								<Button color="red" isSubmitting={isSubmitting} onClick={async () => handleOnDelete(event)}>Delete Event</Button>
+								{session && (
+									<Button color="red" isSubmitting={isSubmitting} onClick={async () => handleOnDelete(event)}>Delete Event</Button>
+								)}
 							</p>
 						</>
 					)}

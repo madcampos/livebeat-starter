@@ -10,6 +10,7 @@ import InputFile from '@/components/InputFile';
 import InputText from '@/components/InputText';
 import Layout from '@/components/Layout';
 
+import { useAuth } from '../../hooks/useAuth.tsx';
 import { createEvent } from '../../lib/events.ts';
 import { createImage } from '../../lib/images.ts';
 
@@ -35,9 +36,16 @@ async function getImageDimentions(file?: File) {
 }
 
 function NewEventPage() {
+	const { session } = useAuth();
 	const [, setLocation] = useLocation();
-	const [error] = useState<string>();
+	const [error, setError] = useState<string>('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	if (!session) {
+		setLocation('/');
+
+		return;
+	}
 
 	async function handleOnSubmit(evt: React.SyntheticEvent) {
 		evt.preventDefault();
@@ -82,6 +90,7 @@ function NewEventPage() {
 			setLocation(`/event/${result.$id}`);
 		} catch (err) {
 			console.error(err);
+			setError((err as Error)?.message ?? err?.toString() ?? 'An error occurred');
 		} finally {
 			form.reset();
 			setIsSubmitting(false);

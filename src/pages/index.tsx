@@ -9,12 +9,14 @@ import EventCard from '@/components/EventCard';
 import Layout from '@/components/Layout';
 
 import { getEvents } from '@/lib/events';
+import { useAuth } from '../hooks/useAuth.tsx';
 import { getFilePreviewUrl } from '../lib/images.ts';
 
 const MIN_IMAGE_WIDTH = 320;
 const MIN_IMAGE_HEIGHT = 240;
 
 function HomePage() {
+	const { session } = useAuth();
 	const [events, setEvents] = useState<DatabaseEvent[] | undefined>([]);
 
 	useEffect(() => {
@@ -40,11 +42,13 @@ function HomePage() {
 							Upcoming Events
 						</h1>
 						<p>
-							<Link href="/event/new">
-								<span className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
-									Add Event
-								</span>
-							</Link>
+							{session && (
+								<Link href="/event/new">
+									<span className="inline-block rounded bg-slate-600 py-1.5 px-4 text-xs font-bold uppercase text-white hover:bg-slate-500 hover:text-white">
+										Add Event
+									</span>
+								</Link>
+							)}
 						</p>
 					</Container>
 
@@ -81,11 +85,13 @@ function HomePage() {
 						No events currently scheduled.
 					</p>
 					<p className="w-100 text-center">
-						<Link href="/event/new">
-							<span>
-								Add an Event
-							</span>
-						</Link>
+						{session && (
+							<Link href="/event/new">
+								<span>
+									Add an Event
+								</span>
+							</Link>
+						)}
 					</p>
 				</Container>
 			)}
